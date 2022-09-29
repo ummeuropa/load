@@ -37,12 +37,12 @@ python3 -m pip install -r requirements.txt
 python3 load.py [-h] [-v] [-o OUTPUT] [-u URL]
 ```
 ### Arguments (required):
-> `-u, --url: url of the website to download from`
+`-u, --url: url of the website to download from`
 
 ### Optional arguments:
-> `-h, --help: shows help message` \
-> `-v, --verbose: enable verbose mode, print logs to stdout` \
-> `-o, --output: set download location. default is ./downloads`
+`-h, --help: shows help message` \
+`-v, --verbose: enable verbose mode, print logs to stdout` \
+`-o, --output: set download location. default is ./downloads`
 
 ## Contribution
 If you want to contribute, you can either make a pull request to patch an error in a Megaloader's plugin, or create yours which I just have to validate before merging. If you're facing any errors, please open an issue.
