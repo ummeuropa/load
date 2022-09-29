@@ -58,3 +58,6 @@ If you like my work, please consider donating! USDT, ETH or MATIC:
 ```
 
 Also consider donating to [Ximaz](https://github.com/Ximaz), megaloader's author, who's work is the foundation of Load. You can find the link to their PayPal on [megaloader's github page]((https://github.com/Ximaz/megaloader))
+
+## Acknowledgement
+My gratitute to @ximaz for creating megaloader and the team behind @ytdl-org for youtube_dl
