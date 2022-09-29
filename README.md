@@ -1,43 +1,56 @@
 # Megaloader
 
-### Introduction
-This project will make you smile. It allows you to use some download plugins for many websites such as :
-- [Cyberdrop](http://www.cyberdrop.me/),
-- [Fanbox](https://www.fanbox.cc),
-- [GoFile](http://www.gofile.io/),
-- [Pixiv](http://www.pixiv.net/),
-- [Rule34](http://www.rule34.xxx/),
-- [ThotsLife](http://www.thotslife.com/).
-- [ThotHub.VIP](http://www.thothub.vip/).
-- [ThotHub.TO](http://www.thothub.to/).
-- [Fapello](http://www.fapello.com/).
+## Introduction
+Load is a fork of [megaloader](https://github.com/Ximaz/megaloader) that
+allows you automate the download of images and videos for many websites, such as [Cyberdrop](http://www.cyberdrop.me/), [fanbox](https://www.fanbox.cc) *(in progress)*, [GoFile](http://www.gofile.io/), [Pixiv](http://www.pixiv.net/), [Rule34](http://www.rule34.xxx/) and [Fapello](http://www.fapello.com/). Load also interfaces with [youtube-dl](https://github.com/ytdl-org/youtube-dl) to provide support for [YouTube](https://youtube.com/), [PornHub](https://pornhub.com), [RedTube](https://www.redtube.com/), [XHamster](https://xhamster.com/), [Reddit](https://reddit.com) and many, many more (you can find an complete list [here]())
 
-The list may grow, but at the moment, it's all about NSFW. Cyberdrop, GoFile, Thotslife and ThotHub are knowned to host some leaks about nudity, while Rule34, Pixiv and Fanbox are hosting some hentai arts.
+If you know how to use *youtube_dl*, there's little reason to use Load to download PH videos and the like. Load's main concern is Cyberdrop, GoFile, Fapello and Mega *(in progress)*, but it comes in handy to be able to download videos from a variety of other websites using the same command (Load) you use to download from Fapello and GoFile while you're at it, and it's just as efficient.
 
-### Setup
-In order to make the project working without error, you need to install the modules in ``requirements.txt``. You can achieve this using the following command :
-```bash
-python3 -m pip install -r requirements.txt
+Load comes with a GUI version so you don't need to bother yourself with the command line, and it's fairly straight foward.
+
+## Setup
+
+First of all, you're gonna need `Python 3.8+` for Load to work (this is because I decided to use the [asignment expressions](https://docs.python.org/3/reference/expressions.html#assignment-expressions) which aren't available in prior versions). To check your Python's version, do:
+```
+python3 --version // python --version on Windows
 ```
 
-### Goal
-The goal of this project is to create script to download all content from a specific website and make it as a plugin using the Megaloader HTTP request, made using ``requests`` modules only.
+You're also gonna need `requests`, which can be installed with:
+```
+pip install requests
+```
+If you're gonna use the GUI version, you're gonna need `tkinter`, which depending on which OS you're using, it might be already installed along with your Python installation. If not:
+```
+pip install python3-tk
+```
+Lastly, if you intend to use Load to download PornHub videos, or YouTube videos, or basically anything that's not Cyberdrop, GoFile, Pixiv, Rule34 or Fapello, you're gonna need `youtube_dl`:
+```
+pip install youtube_dl
+```
+Or, for short, just do:
+```
+python3 -m pip install -r requirements.txt
+```
+## How to use
 
-### Why ?
-I'm interested in the download automation. Sometimes it's easy to make, sometimes it's not. But everytime I do a downloader that works, I put it on GitHub using a new repository. This time, I'm going to make a Monolith repository containing all my downloader adapted for a plugin form.
+```
+python3 load.py [-h] [-v] [-o OUTPUT] [-u URL]
+```
+### Arguments (required):
+> `-u, --url: url of the website to download from`
 
-### Contribution
-If you want to contribute, you can either make a pull request to patch an error in a Megaloader's plugin, or create yours which I just have to validate before merging.
-If you're facing any error, please, open an issue.
+### Optional arguments:
+> `-h, --help: shows help message` \
+> `-v, --verbose: enable verbose mode, print logs to stdout` \
+> `-o, --output: set download location. default is ./downloads`
 
-### Thanks
-Thanks for the support you're giving to me, it makes me happy to see a new star notification.
+## Contribution
+If you want to contribute, you can either make a pull request to patch an error in a Megaloader's plugin, or create yours which I just have to validate before merging. If you're facing any errors, please open an issue.
 
-### Other way to support
-If you want to support me in depth, you can [donate me here](https://www.paypal.me/quatrecentquatre). Thanks to futur donators.
+## Donate
+If you like my work, please consider donating! USDT, ETH or MATIC:
+```
+0xfbccdd2e2f17c72fbdc41f172c9f572017b57e30
+```
 
-# Snippets
-
-Below, you will be able to see many snippets on existing plugins to see how it can be used. Sure, you're gonna need to see in depth the source code of each plugin because some don't work the same as other, since some websites asks for certain auth token, or else, and other don't.
-
-Many snippets example are foundable at ``examples/``. You can open them, copy their code and paste it into the ``test.py`` file at the root of the project. Then, you can launch the script.
+Also consider donating to [Ximaz](https://github.com/Ximaz), megaloader's author, who's work is the foundation of Load. You can find the link to their PayPal on [megaloader's github page]((https://github.com/Ximaz/megaloader))

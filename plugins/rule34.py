@@ -1,36 +1,36 @@
-import math
 import requests
-import xml.etree.ElementTree as XML_ET
 from megaloader.http import http_download
+import xml.etree.ElementTree as XML_ET
 
 class Rule34:
-    def __init__(self, tags: list):
-        self.__tags = tags
+    def __init__(self, tags: list, verbose = False):
+        self.__tags = ["ass"]
+        self.verbose = verbose
 
     @property
-    def tags(self):
-        return self.__tags
+    def tags(self): return self.__tags
 
-    def api_url_builder(self, pid: int = 0, limit: int = 100):
-        return "https://rule34.xxx/index.php?page=dapi&s=post&q=index&tags={}&pid={}&limit={}".format(",".join(self.tags), pid, limit)
+    def url_builder(self, pid, limit):
+        l = f'https://rule34.xxx/index.php?page=dapi&s=post&q=index&tags={",".join(self.tags)}&pid={pid}&limit={limit}'
+        if self.verbose: print(l)
+        return l
 
     def export(self):
-        pid = 0
-        limit = 100
+        mediarray = []; c = 0
+        pid = -1; limit = 100
         while True:
-            url = self.api_url_builder(pid=pid)
+            url = self.url_builder(pid:=pid+1, limit=limit)
             data = requests.get(url).text
             data = XML_ET.fromstringlist([data])
-            total_posts = int(data.get("count"))
             posts = data.iter("post")
-            for post in posts:
-                yield post.get("file_url")
-            pid_limit = math.ceil(total_posts / limit)
-            if pid_limit == pid:
-                break
-            pid += 1
+            for post in posts: mediarray.append((c:=c+1, post.get("file_url")))
+            if limit == pid: break
+        return mediarray
 
-    def download_file(self, url: str, output: str):
-        http_download(url, output, custom_headers={
-            "Accept": "gzip, deflate, br"
-        })
+    def download(self, output: str):
+        mediarray = self.export()
+        filec = mediarray[-1][0]
+        if self.verbose: print(f"\033[33;1mFiles\t%\tCurrent file\033[0m")
+        for (counter, media) in mediarray:
+            http_download(media, output, filec=filec, counter=counter, verbose=self.verbose)
+        return

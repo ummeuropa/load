@@ -6,12 +6,12 @@ from megaloader.http import http_download
 REGEX_BUILD_ID = r"<script id=\"__NEXT_DATA__\" type=\"application\/json\">(\{.*\})<\/script>"
 
 class Bunkr:
-    def __init__(self, url: str):
+    def __init__(self, url: str, verbose = False):
         self.__url = url
+        self.verbose = verbose
 
     @property
-    def url(self):
-        return self.__url
+    def url(self): return self.__url
 
     def getBuildId(self, resText):
         return json.loads(re.search(REGEX_BUILD_ID, resText)[1])["buildId"]
@@ -26,17 +26,24 @@ class Bunkr:
         buildId = self.getBuildId(response.text)
         # is album
         if "/a/" in self.url:
+            mediarray = []; c = 0
             nextUrl = self.getNextUrl(self.url, buildId)
             files = json.loads(requests.get(nextUrl).text)["pageProps"]["files"]
             for url in files:
-                yield url["cdn"].replace("cdn", "media-files") + '/' + url["name"]
+                mediarray.append((c:=c+1, url["cdn"].replace("cdn", "media-files") + '/' + url["name"]))
+            return mediarray
         # is specific resource
         else:
             nextUrl = self.getNextUrl(self.url, buildId, False)
             file = json.loads(requests.get(nextUrl).text)["pageProps"]["file"]
             domain = file["mediafiles"]
             name = file["name"]
-            yield f"{domain}/{name}"
+            return [(1, (f"{domain}/{name}"))]
 
-    def download_file(self, url: str, output: str):
-        http_download(url, output, custom_headers=None, headers_required=False)
+    def download(self, output: str):
+        mediarray = self.export()
+        filec = mediarray[-1][0]
+        if self.verbose: print(f"\033[33;1mFiles\t%\tCurrent file\033[0m")
+        for (counter, media) in mediarray:
+            http_download(media, output, filec=filec, counter=counter, verbose=self.verbose)
+        return

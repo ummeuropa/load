@@ -4,18 +4,15 @@ from megaloader.http import http_download
 
 class Pixiv:
 
-    def __init__(self, url: str, PHPSESSID: str = None):
+    def __init__(self, url: str, PHPSESSID: str = None, verbose = False):
         self.__creator_id = None
-        self.__headers = {
-            "Accept": "application/json",
-        }
+        self.__headers = {"Accept": "application/json",}
         match = re.search(r"https://www.pixiv.net/\w+/users/(\d+)", url)
 
-        if not match:
-            raise ValueError("Invalid pixiv url provided.")
-        if PHPSESSID is not None:
-            self.__headers["Cookie"] = "PHPSESSID=" + PHPSESSID
+        if not match: raise ValueError("Invalid pixiv url provided.")
+        if PHPSESSID is not None: self.__headers["Cookie"] = "PHPSESSID=" + PHPSESSID
         self.__creator_id = match[1]
+        self.verbose = verbose
 
     @property
     def creator_id(self):
@@ -33,11 +30,16 @@ class Pixiv:
             yield illust["urls"]["original"]
 
     def export(self):
+        mediarray = []; c = 0
         for artwork_id in self.get_user_home_illusts():
             for url in self.build_artwork_urls(artwork_id):
-                yield url
+                mediarray.append((c:=c+1, url))
+        return mediarray
 
-    def download_file(self, url: str, output: str):
-        http_download(url, output, custom_headers={
-            "Accept": "gzip, deflate, br"
-        })
+    def download(self, output: str):
+        mediarray = self.export()
+        filec = mediarray[-1][0]
+        if self.verbose: print(f"\033[33;1mFiles\t%\tCurrent file\033[0m")
+        for (counter, media) in mediarray:
+            http_download(media, output, filec=filec, counter=counter, verbose=self.verbose)
+        return
